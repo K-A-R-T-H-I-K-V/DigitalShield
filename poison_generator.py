@@ -18,9 +18,9 @@ class NightshadePoisoner:
         self.transform = self._get_transform()
         self.augmentation = self._get_augmentation()
         self.attack_params = {
-            'epsilon': 24/255,      # Increased for stronger perturbation
+            'epsilon': 20/255,      # Increased for stronger perturbation
             'alpha': 4/255,         # Larger step size for faster convergence
-            'iterations': 30,       # More iterations for refinement
+            'iterations': 20,       # More iterations for refinement
             'num_classes': 1000,
             'min_psnr': 28,         # Relaxed to allow larger perturbations
             'feature_weight': 0.0,  # Still disabled
