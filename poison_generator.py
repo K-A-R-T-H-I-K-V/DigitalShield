@@ -18,11 +18,11 @@ class NightshadePoisoner:
         self.transform = self._get_transform()
         self.augmentation = self._get_augmentation()
         self.attack_params = {
-            'epsilon': 14/255,      # Balanced perturbation
-            'alpha': 2.0/255,       # Aggressive step size
-            'iterations': 5,        # Minimal iterations
+            'epsilon': 16/255,      # Balanced perturbation
+            'alpha': 4.0/255,       # Aggressive step size
+            'iterations': 20,        # Minimal iterations
             'num_classes': 1000,
-            'min_psnr': 30,         # Strict visual quality
+            'min_psnr': 28,         # Strict visual quality
             'feature_weight': 0.0,  # No feature-space loss
             'pixel_reg': 0.1,       # Minimal regularization
             'max_retries': 3,       # Retry with scaled-down perturbations
