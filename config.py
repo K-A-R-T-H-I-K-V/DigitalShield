@@ -3,8 +3,8 @@ import torch
 class Config:
     # Poisoning parameters
     POISON_RATIO = 0.1  # Percentage of images to poison
-    EPSILON = 8/255     # Maximum perturbation (L∞ norm)
-    ALPHA = 2/255       # Attack step size
+    EPSILON = 20/255     # Maximum perturbation (L∞ norm)
+    ALPHA = 4/255       # Attack step size
     ITERATIONS = 20     # Number of attack iterations
     
     # Model parameters
