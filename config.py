@@ -5,7 +5,7 @@ class Config:
     POISON_RATIO = 0.1  # Percentage of images to poison
     EPSILON = 8/255     # Maximum perturbation (L∞ norm)
     ALPHA = 2/255       # Attack step size
-    ITERATIONS = 10     # Number of attack iterations
+    ITERATIONS = 20     # Number of attack iterations
     
     # Model parameters
     TARGET_CLASSES = 1000
