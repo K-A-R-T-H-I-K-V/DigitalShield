@@ -18,16 +18,16 @@ class NightshadePoisoner:
         self.transform = self._get_transform()
         self.augmentation = self._get_augmentation()
         self.attack_params = {
-            'epsilon': 20/255,      # Increased for stronger perturbation
-            'alpha': 4/255,         # Larger step size for faster convergence
-            'iterations': 20,       # More iterations for refinement
+            'epsilon': 20/255,
+            'alpha': 4/255,
+            'iterations': 20,
             'num_classes': 1000,
-            'min_psnr': 28,         # Relaxed to allow larger perturbations
-            'feature_weight': 0.0,  # Still disabled
-            'pixel_reg': 0.05,      # Reduced to allow larger perturbations
+            'min_psnr': 28,
+            'feature_weight': 0.0,
+            'pixel_reg': 0.05,
             'max_retries': 3,
-            'augment_prob': 0.3,    # Increased for robustness
-            'target_weight': 20.0   # Stronger push toward target class
+            'augment_prob': 0.3,
+            'target_weight': 20.0
         }
         self.verifier = self._load_verifier()
 
@@ -89,13 +89,11 @@ class NightshadePoisoner:
         for i in range(self.attack_params['iterations']):
             perturbed = original + perturbation
 
-            # Apply augmentation
             if random.random() < self.attack_params['augment_prob']:
                 perturbed_aug = self.augmentation(perturbed.squeeze(0)).unsqueeze(0).to(self.device)
             else:
                 perturbed_aug = perturbed
 
-            # PGD: Targeted cross-entropy + original class penalty + confidence boost
             total_loss = 0
             for model_name, model in self.models.items():
                 outputs = model(perturbed_aug)
@@ -105,11 +103,9 @@ class NightshadePoisoner:
                 confidence_loss = -torch.log(target_prob + 1e-6)
                 total_loss += target_loss + 0.8 * original_loss + 0.6 * confidence_loss
 
-            # Pixel regularization
             pixel_loss = torch.norm(perturbation, p=2)
             total_loss += self.attack_params['pixel_reg'] * pixel_loss
 
-            # Backpropagate
             perturbation.grad = None
             total_loss.backward()
             perturbation.data = perturbation.data + self.attack_params['alpha'] * scale * perturbation.grad.sign()
@@ -118,18 +114,15 @@ class NightshadePoisoner:
                                          self.attack_params['epsilon'] * scale)
             perturbation.grad.zero_()
 
-            # In-loop verification
             poisoned_class, poisoned_prob = self._predict_class(perturbed)
             print(f"Iteration {i}: Perturbation norm = {torch.norm(perturbation).item():.4f}, "
                   f"Loss = {total_loss.item():.4f}, "
                   f"Poisoned prediction: Class {poisoned_class}, Confidence {poisoned_prob:.4f}")
 
-            # Early stopping if target class achieved with high confidence
-            if poisoned_class == target_class and poisoned_prob > 0.9:  # Increased threshold
+            if poisoned_class == target_class and poisoned_prob > 0.9:
                 print(f"Target class {target_class} achieved at iteration {i}")
                 break
 
-            # Save debug image only if target not reached
             if i == self.attack_params['iterations'] - 1 and poisoned_class != target_class:
                 intermediate_img = self._tensor_to_image(perturbed.detach())
                 cv2.imwrite(f"debug_intermediate_final.png", cv2.cvtColor(intermediate_img, cv2.COLOR_RGB2BGR))
@@ -221,6 +214,7 @@ class NightshadePoisoner:
 
         return success_count
     
+
 # import torch
 # import torch.nn as nn
 # import numpy as np
@@ -241,16 +235,16 @@ class NightshadePoisoner:
 #         self.transform = self._get_transform()
 #         self.augmentation = self._get_augmentation()
 #         self.attack_params = {
-#             'epsilon': 20/255,      # Balanced perturbation
-#             'alpha': 4.0/255,       # Aggressive step size
-#             'iterations': 20,        # Minimal iterations
+#             'epsilon': 20/255,      # Increased for stronger perturbation
+#             'alpha': 4/255,         # Larger step size for faster convergence
+#             'iterations': 20,       # More iterations for refinement
 #             'num_classes': 1000,
-#             'min_psnr': 28,         # Strict visual quality
-#             'feature_weight': 0.0,  # No feature-space loss
-#             'pixel_reg': 0.05,       # Minimal regularization
-#             'max_retries': 3,       # Retry with scaled-down perturbations
-#             'augment_prob': 0.15,   # Ultra-light augmentations
-#             'target_weight': 20.0   # Strong target loss
+#             'min_psnr': 28,         # Relaxed to allow larger perturbations
+#             'feature_weight': 0.0,  # Still disabled
+#             'pixel_reg': 0.05,      # Reduced to allow larger perturbations
+#             'max_retries': 3,
+#             'augment_prob': 0.3,    # Increased for robustness
+#             'target_weight': 20.0   # Stronger push toward target class
 #         }
 #         self.verifier = self._load_verifier()
 
@@ -347,8 +341,8 @@ class NightshadePoisoner:
 #                   f"Loss = {total_loss.item():.4f}, "
 #                   f"Poisoned prediction: Class {poisoned_class}, Confidence {poisoned_prob:.4f}")
 
-#             # Early stopping if target class achieved
-#             if poisoned_class == target_class and poisoned_prob > 0.7:
+#             # Early stopping if target class achieved with high confidence
+#             if poisoned_class == target_class and poisoned_prob > 0.9:  # Increased threshold
 #                 print(f"Target class {target_class} achieved at iteration {i}")
 #                 break
 
@@ -443,3 +437,4 @@ class NightshadePoisoner:
 #                 continue
 
 #         return success_count
+    

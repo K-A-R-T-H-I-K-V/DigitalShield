@@ -5,3 +5,8 @@ data/raw/
 data/processed/
 *.csv
 *.ipynb_checkpoints/
+node_modules/
+.env
+artifacts/
+cache/
+hackathon_notes.txt
