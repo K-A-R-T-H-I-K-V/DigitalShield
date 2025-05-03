@@ -18,16 +18,16 @@ class NightshadePoisoner:
         self.transform = self._get_transform()
         self.augmentation = self._get_augmentation()
         self.attack_params = {
-            'epsilon': 16/255,      # Balanced perturbation
-            'alpha': 4.0/255,       # Aggressive step size
-            'iterations': 20,        # Minimal iterations
-            'num_classes': 1000,
-            'min_psnr': 28,         # Strict visual quality
-            'feature_weight': 0.0,  # No feature-space loss
-            'pixel_reg': 0.1,       # Minimal regularization
-            'max_retries': 3,       # Retry with scaled-down perturbations
-            'augment_prob': 0.15,   # Ultra-light augmentations
-            'target_weight': 12.0   # Strong target loss
+            'epsilon': 2/255,       # Further reduced perturbation size (was 4/255)
+            'alpha': 0.2/255,       # Further reduced step size (was 0.5/255)
+            'iterations': 3,        # Further reduced iterations (was 5)
+            'num_classes': 1000,    # Number of ImageNet classes
+            'min_psnr': 28,         # Increased to enforce better visual quality (was 25)
+            'feature_weight': 0.0,  # Weight for feature-space loss (disabled)
+            'pixel_reg': 0.01,      # Further reduced regularization (was 0.02)
+            'max_retries': 3,       # Number of retries with reduced scale
+            'augment_prob': 0.01,   # Further reduced augmentation probability (was 0.05)
+            'target_weight': 25.0   # Increased target weight (was 20.0)
         }
         self.verifier = self._load_verifier()
 
@@ -125,7 +125,7 @@ class NightshadePoisoner:
                   f"Poisoned prediction: Class {poisoned_class}, Confidence {poisoned_prob:.4f}")
 
             # Early stopping if target class achieved
-            if poisoned_class == target_class and poisoned_prob > 0.7:
+            if poisoned_class == target_class and poisoned_prob > 0.8:  # Increased confidence threshold
                 print(f"Target class {target_class} achieved at iteration {i}")
                 break
 
