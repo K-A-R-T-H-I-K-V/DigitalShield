@@ -1,0 +1,329 @@
+.track-page {
+  position: relative;
+  z-index: 1;
+}
+
+.track-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.monitor-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.monitor-form {
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.input-container {
+  position: relative;
+}
+
+.futuristic-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background-color: rgba(255, 0, 230, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-color);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.futuristic-input:focus {
+  border-color: var(--track-color);
+  box-shadow: 0 0 5px var(--track-color);
+}
+
+.futuristic-input::placeholder {
+  color: var(--text-color-secondary);
+  opacity: 0.5;
+}
+
+.monitor-results {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.results-header {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--track-color);
+  margin-bottom: 0.8rem;
+}
+
+.results-container {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-y: auto;
+  min-height: 200px;
+}
+
+.monitoring-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.monitoring-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid transparent;
+  border-top-color: var(--track-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.monitoring-text {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  text-align: center;
+}
+
+.log-entries {
+  display: flex;
+  flex-direction: column;
+}
+
+.log-entry {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.log-entry:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.log-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 0.8rem;
+  margin-top: 0.2rem;
+  background-color: var(--track-color);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 12h-4l-3 9L9 3l-3 9H2'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 12h-4l-3 9L9 3l-3 9H2'/%3E%3C/svg%3E");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  flex-shrink: 0;
+}
+
+.log-text {
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.no-results-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1rem;
+  background-color: var(--text-color-secondary);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='16' x2='12' y2='12'/%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'/%3E%3C/svg%3E");
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='16' x2='12' y2='12'/%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'/%3E%3C/svg%3E");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  opacity: 0.5;
+}
+
+.no-results-text {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.error-message {
+  color: var(--error-color);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 62, 62, 0.1);
+  border-radius: 4px;
+  border: 1px solid var(--error-color);
+}
+
+.error-details {
+  margin-top: 0.5rem;
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+.info-card {
+  height: 100%;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.info-section {
+  margin-bottom: 1.5rem;
+}
+
+.info-section h3 {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--track-color);
+  margin-bottom: 0.5rem;
+}
+
+.info-section p {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+  line-height: 1.5;
+}
+
+.info-diagram {
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.diagram-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.diagram-image,
+.diagram-watermark,
+.diagram-ipfs,
+.diagram-blockchain {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 0, 230, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.diagram-watermark {
+  background-color: rgba(255, 0, 230, 0.1);
+}
+
+.diagram-ipfs {
+  background-color: rgba(255, 0, 230, 0.15);
+}
+
+.diagram-blockchain {
+  background-color: rgba(255, 0, 230, 0.2);
+}
+
+.diagram-label {
+  position: absolute;
+  bottom: -25px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-color-secondary);
+}
+
+.diagram-arrow {
+  width: 30px;
+  height: 2px;
+  background-color: var(--track-color);
+  position: relative;
+}
+
+.diagram-arrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--track-color);
+}
+
+.tracking-diagram .diagram-container {
+  justify-content: space-around;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .diagram-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .diagram-arrow {
+    width: 2px;
+    height: 20px;
+    margin: 20px 0;
+  }
+
+  .diagram-arrow::after {
+    right: 50%;
+    top: 100%;
+    transform: translateX(50%);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid var(--track-color);
+    border-bottom: none;
+  }
+
+  .diagram-label {
+    position: relative;
+    bottom: auto;
+    margin-top: 0.5rem;
+  }
+}

@@ -1,0 +1,1 @@
+data/ venv/ node_modules/ .env artifacts cache .git/ .gitignore *.md *.log

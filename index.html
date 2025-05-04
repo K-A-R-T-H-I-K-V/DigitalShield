@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataGuardian Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+            margin-bottom: 10px;
+        }
+        input[type="text"], input[type="file"] {
+            width: 300px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>DataGuardian Backend Test</h1>
+
+    <h2>Upload and Protect Image</h2>
+    <form id="uploadForm" action="javascript:void(0)">
+        <label for="image">Select Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required><br>
+
+        <label for="secret">Watermark Secret:</label>
+        <input type="text" id="secret" name="secret" value="secretKey123" required><br>
+
+        <label for="isPublic">Public Tracking:</label>
+        <input type="checkbox" id="isPublic" name="isPublic"><br>
+
+        <button type="submit">Protect Image</button>
+    </form>
+    <p><strong>Upload Result:</strong></p>
+    <pre id="uploadResult">Waiting for upload...</pre>
+
+    <h2>Monitor CID</h2>
+    <form id="monitorForm" action="javascript:void(0)">
+        <label for="monitorCid">CID to Monitor:</label>
+        <input type="text" id="monitorCid" name="cid" placeholder="Enter CID to monitor" required><br>
+
+        <button type="submit">Monitor CID</button>
+    </form>
+    <p><strong>Monitor Result:</strong></p>
+    <pre id="monitorResult">Waiting for monitor...</pre>
+
+    <h2>Revoke Access</h2>
+    <form id="revokeForm" action="javascript:void(0)">
+        <label for="cid">Encrypted CID:</label>
+        <input type="text" id="cid" name="cid" placeholder="Enter encryptedCid" required><br>
+
+        <button type="submit">Revoke Access</button>
+    </form>
+    <p><strong>Revoke Result:</strong></p>
+    <pre id="revokeResult">Waiting for revoke...</pre>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const uploadResultElement = document.getElementById('uploadResult');
+        const monitorForm = document.getElementById('monitorForm');
+        const monitorResultElement = document.getElementById('monitorResult');
+        const revokeForm = document.getElementById('revokeForm');
+        const revokeResultElement = document.getElementById('revokeResult');
+
+        // Keep track of revoked CIDs to prevent duplicate submissions
+        const revokedCids = new Set();
+
+        if (!uploadForm || !uploadResultElement || !monitorForm || !monitorResultElement || !revokeForm || !revokeResultElement) {
+            console.error('DOM elements not found:', {
+                uploadForm: !!uploadForm,
+                uploadResultElement: !!uploadResultElement,
+                monitorForm: !!monitorForm,
+                monitorResultElement: !!monitorResultElement,
+                revokeForm: !!revokeForm,
+                revokeResultElement: !!revokeResultElement
+            });
+            alert('Error: Required DOM elements not found. Please check the HTML structure.');
+            throw new Error('Required DOM elements not found');
+        }
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Form submission prevented, starting upload process');
+
+            uploadResultElement.textContent = 'Processing...';
+            console.log('Set uploadResult to "Processing..."');
+
+            try {
+                const formData = new FormData();
+                const imageFile = document.getElementById('image').files[0];
+                const secret = document.getElementById('secret').value;
+                const isPublic = document.getElementById('isPublic').checked;
+
+                if (!imageFile) {
+                    throw new Error('No image selected');
+                }
+
+                formData.append('image', imageFile);
+                formData.append('secret', secret);
+                formData.append('isPublic', isPublic);
+
+                console.log('Sending request to /api/protect with form data:', {
+                    image: imageFile.name,
+                    secret: secret,
+                    isPublic: isPublic
+                });
+
+                const response = await fetch('http://localhost:5000/api/protect', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                console.log('Response received:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: [...response.headers.entries()]
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Response not OK:', response.status, errorText);
+                    throw new Error(errorText || `HTTP error ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Parsed response:', result);
+
+                uploadResultElement.textContent = JSON.stringify(result, null, 2);
+                console.log('Result displayed in UI:', result);
+            } catch (error) {
+                console.error('Error during upload process:', error);
+                uploadResultElement.textContent = `Error: ${error.message}`;
+                uploadResultElement.classList.add('error');
+            }
+        });
+
+        monitorForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Monitor form submission prevented, starting monitor process');
+
+            monitorResultElement.textContent = 'Processing...';
+            console.log('Set monitorResult to "Processing..."');
+
+            try {
+                const cid = document.getElementById('monitorCid').value;
+
+                if (!cid) {
+                    throw new Error('CID is required');
+                }
+
+                console.log('Sending monitor request for CID:', cid);
+
+                const response = await fetch('http://localhost:5000/api/monitor', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cid })
+                });
+
+                console.log('Monitor response received:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: [...response.headers.entries()]
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Monitor response not OK:', response.status, errorText);
+                    throw new Error(errorText || `HTTP error ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Parsed monitor response:', result);
+
+                if (result.status === 'success') {
+                    monitorResultElement.textContent = result.results.join('\n');
+                } else {
+                    throw new Error(result.message || 'Monitoring failed');
+                }
+                console.log('Monitor result displayed in UI:', result);
+            } catch (error) {
+                console.error('Error during monitor process:', error);
+                monitorResultElement.textContent = `Error: ${error.message}`;
+                monitorResultElement.classList.add('error');
+            }
+        });
+
+        revokeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Revoke form submission prevented, starting revoke process');
+
+            revokeResultElement.textContent = 'Processing...';
+            console.log('Set revokeResult to "Processing..."');
+
+            try {
+                const cid = document.getElementById('cid').value;
+
+                if (!cid) {
+                    throw new Error('CID is required');
+                }
+
+                // Check if CID has already been revoked
+                if (revokedCids.has(cid)) {
+                    console.log(`CID ${cid} has already been revoked`);
+                    revokeResultElement.textContent = JSON.stringify({ success: true, message: "CID has already been revoked locally" }, null, 2);
+                    return;
+                }
+
+                console.log('Sending revoke request for CID:', cid);
+
+                const response = await fetch('http://localhost:5000/api/revoke', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cid })
+                });
+
+                console.log('Revoke response received:', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: [...response.headers.entries()]
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Revoke response not OK:', response.status, errorText);
+                    throw new Error(errorText || `HTTP error ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Parsed revoke response:', result);
+
+                // Add CID to revoked set if successful
+                if (result.success) {
+                    revokedCids.add(cid);
+                }
+
+                revokeResultElement.textContent = JSON.stringify(result, null, 2);
+                console.log('Revoke result displayed in UI:', result);
+            } catch (error) {
+                console.error('Error during revoke process:', error);
+                revokeResultElement.textContent = `Error: ${error.message}`;
+                revokeResultElement.classList.add('error');
+            }
+        });
+    </script>
+</body>
+</html>

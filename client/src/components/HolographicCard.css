@@ -1,0 +1,144 @@
+.holographic-card {
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.holographic-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.holographic-card.hovered::before {
+  opacity: 1;
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+}
+
+.card-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: var(--glow-color, var(--primary-color));
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+}
+
+.card-title::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--glow-color, var(--primary-color)) 0%,
+    transparent 100%
+  );
+}
+
+.card-body {
+  color: var(--text-color);
+}
+
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--x) var(--y),
+    rgba(var(--glow-color-rgb, 0, 240, 255), 0.15) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.holographic-card.hovered .card-glow {
+  opacity: 1;
+}
+
+.card-reflection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+
+.holographic-card.hovered .card-reflection {
+  transform: translateX(100%) rotate(45deg);
+}
+
+.card-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(var(--glow-color-rgb, 0, 240, 255), 0.03) 50%,
+    rgba(var(--glow-color-rgb, 0, 240, 255), 0.03) 51%,
+    transparent 51%,
+    transparent 100%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.holographic-card.hovered .card-scanline {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .holographic-card {
+    padding: 1.2rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+}

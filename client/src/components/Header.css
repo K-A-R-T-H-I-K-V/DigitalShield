@@ -1,0 +1,245 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+  padding: 0 2rem;
+  background-color: rgba(5, 5, 16, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  z-index: 100;
+}
+
+.header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--primary-color) 50%,
+    transparent 100%
+  );
+  opacity: 0.5;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 1.5rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.menu-button:hover {
+  background-color: rgba(0, 240, 255, 0.1);
+}
+
+.menu-button:focus {
+  outline: none;
+}
+
+.menu-icon {
+  width: 24px;
+  height: 18px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menu-icon span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.menu-button:hover .menu-icon span {
+  background-color: var(--primary-color);
+  box-shadow: 0 0 5px var(--primary-color);
+}
+
+.logo-container {
+  text-decoration: none;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logo-text {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  position: relative;
+}
+
+.logo-underline {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary-color) 0%, transparent 100%);
+  margin-top: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-underline::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 240, 255, 0.8) 50%,
+    transparent 100%
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.datetime-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 2rem;
+}
+
+.time {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.date {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--primary-color);
+  position: relative;
+  overflow: hidden;
+  margin-right: 1rem;
+}
+
+.avatar-hologram {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 70%;
+  background-color: rgba(0, 240, 255, 0.2);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--primary-color);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 5px var(--primary-color);
+    opacity: 0.5;
+  }
+  50% {
+    box-shadow: 0 0 15px var(--primary-color);
+    opacity: 0.8;
+  }
+  100% {
+    box-shadow: 0 0 5px var(--primary-color);
+    opacity: 0.5;
+  }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.user-status {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  color: var(--tertiary-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1rem;
+    height: 70px;
+  }
+
+  .logo-text {
+    font-size: 1.5rem;
+  }
+
+  .datetime-display {
+    display: none;
+  }
+
+  .user-name {
+    font-size: 0.8rem;
+  }
+
+  .user-status {
+    font-size: 0.7rem;
+  }
+}

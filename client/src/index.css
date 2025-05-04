@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #00f0ff;
+  --secondary-color: #ff00e6;
+  --tertiary-color: #00ff88;
+  --background-color: #050510;
+  --surface-color: rgba(20, 25, 40, 0.7);
+  --surface-color-light: rgba(30, 35, 50, 0.7);
+  --text-color: #ffffff;
+  --text-color-secondary: rgba(255, 255, 255, 0.7);
+  --border-color: rgba(0, 240, 255, 0.3);
+  --poison-color: #00f0ff;
+  --track-color: #ff00e6;
+  --revoke-color: #00ff88;
+  --warning-color: #ffae00;
+  --error-color: #ff3e3e;
+  --success-color: #00ff88;
+  --glow-intensity: 0.5;
+  --animation-speed: 0.3s;
+}
+
+body {
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

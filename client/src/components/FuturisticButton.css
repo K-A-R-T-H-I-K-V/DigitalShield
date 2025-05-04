@@ -1,0 +1,173 @@
+.futuristic-button {
+    position: relative;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: "Rajdhani", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-color);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    outline: none;
+    min-width: 150px;
+  }
+  
+  .futuristic-button:focus {
+    outline: none;
+  }
+  
+  .button-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 240, 255, 0.1);
+    z-index: -2;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  .button-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 240, 255, 0.2) 50%, transparent 100%);
+    z-index: -1;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: all 0.5s ease;
+  }
+  
+  .futuristic-button:hover .button-glow {
+    opacity: 1;
+    transform: translateX(100%);
+  }
+  
+  .button-content {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .button-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    z-index: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .futuristic-button:hover .button-border {
+    box-shadow: 0 0 10px var(--primary-color);
+  }
+  
+  .futuristic-button.pressed .button-background {
+    transform: scale(0.98);
+  }
+  
+  .futuristic-button.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .futuristic-button.disabled .button-border {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .futuristic-button.disabled:hover .button-glow {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  
+  /* Button colors */
+  .futuristic-button.primary .button-background {
+    background-color: rgba(0, 240, 255, 0.1);
+  }
+  
+  .futuristic-button.primary .button-border {
+    border-color: var(--primary-color);
+  }
+  
+  .futuristic-button.primary:hover .button-border {
+    box-shadow: 0 0 10px var(--primary-color);
+  }
+  
+  .futuristic-button.secondary .button-background {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .futuristic-button.secondary .button-border {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .futuristic-button.secondary:hover .button-border {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  
+  .futuristic-button.poison .button-background {
+    background-color: rgba(0, 240, 255, 0.1);
+  }
+  
+  .futuristic-button.poison .button-border {
+    border-color: var(--poison-color);
+  }
+  
+  .futuristic-button.poison:hover .button-border {
+    box-shadow: 0 0 10px var(--poison-color);
+  }
+  
+  .futuristic-button.track .button-background {
+    background-color: rgba(255, 0, 230, 0.1);
+  }
+  
+  .futuristic-button.track .button-border {
+    border-color: var(--track-color);
+  }
+  
+  .futuristic-button.track:hover .button-border {
+    box-shadow: 0 0 10px var(--track-color);
+  }
+  
+  .futuristic-button.revoke .button-background {
+    background-color: rgba(0, 255, 136, 0.1);
+  }
+  
+  .futuristic-button.revoke .button-border {
+    border-color: var(--revoke-color);
+  }
+  
+  .futuristic-button.revoke:hover .button-border {
+    box-shadow: 0 0 10px var(--revoke-color);
+  }
+  
+  /* Button sizes */
+  .futuristic-button.small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    min-width: 120px;
+  }
+  
+  .futuristic-button.large {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    min-width: 180px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .futuristic-button {
+      padding: 0.7rem 1.2rem;
+      font-size: 0.8rem;
+      min-width: 130px;
+    }
+  }
+  
