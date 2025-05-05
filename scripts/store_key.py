@@ -5,13 +5,29 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def store_key_on_chain(sepolia_rpc_url, private_key, contract_address, image_cid, encryption_key, retries=3, delay=5):
-    """Store the encryption key on-chain with retry logic"""
-    w3 = Web3(Web3.HTTPProvider(sepolia_rpc_url))
-    if not w3.is_connected():
-        raise ConnectionError("Failed to connect to Sepolia. Check SEPOLIA_RPC_URL.")
+def store_key_on_chain(sepolia_rpc_url, private_key, contract_address, cid, key, retries=3, delay=5):
+    """Store an encryption key on the blockchain with retry logic and detailed error logging"""
+    max_connection_retries = 3
+    for attempt in range(max_connection_retries):
+        try:
+            w3 = Web3(Web3.HTTPProvider(sepolia_rpc_url, request_kwargs={'timeout': 60}))
+            if not w3.is_connected():
+                raise ConnectionError("Failed to connect to Sepolia. Check SEPOLIA_RPC_URL.")
+            break
+        except Exception as e:
+            if attempt < max_connection_retries - 1:
+                logger.warning(f"Attempt {attempt + 1}/{max_connection_retries} failed to connect to Sepolia: {str(e)}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+                continue
+            raise ConnectionError(f"Failed to connect to Sepolia after {max_connection_retries} attempts: {str(e)}")
 
     account = w3.eth.account.from_key(private_key)
+
+    # Check account balance
+    balance = w3.eth.get_balance(account.address)
+    logger.info(f"Account balance: {w3.from_wei(balance, 'ether')} ETH")
+    if balance == 0:
+        raise ValueError("Account has 0 ETH. Please fund your Sepolia testnet account.")
 
     contract_abi = [
         {
@@ -23,47 +39,69 @@ def store_key_on_chain(sepolia_rpc_url, private_key, contract_address, image_cid
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
+        },
+        {
+            "anonymous": False,
+            "inputs": [
+                {"indexed": True, "internalType": "string", "name": "cid", "type": "string"},
+                {"indexed": False, "internalType": "string", "name": "key", "type": "string"}
+            ],
+            "name": "KeyStored",
+            "type": "event"
         }
     ]
 
     contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 
+    logger.info(f"Storing key for CID: {cid}")
+
     for attempt in range(retries):
         try:
-            # Get the latest nonce, including pending transactions
             nonce = w3.eth.get_transaction_count(account.address, 'pending')
             logger.info(f"Using nonce: {nonce} for attempt {attempt + 1}")
-
-            # Use dynamic gas price, increased by 50%
             gas_price = int(w3.eth.gas_price * 1.5)
             logger.info(f"Using gas price: {gas_price} wei")
 
-            tx = contract.functions.storeKey(image_cid, encryption_key).build_transaction({
+            # Estimate gas and increase the limit
+            gas_estimate = contract.functions.storeKey(cid, key).estimate_gas({
+                'from': account.address,
+            })
+            gas_limit = int(gas_estimate * 1.5)  # 50% buffer
+            logger.info(f"Estimated gas: {gas_estimate}, Using gas limit: {gas_limit}")
+
+            tx = contract.functions.storeKey(cid, key).build_transaction({
                 'from': account.address,
                 'nonce': nonce,
-                'gas': 200000,
+                'gas': max(gas_limit, 300000),  # Ensure at least 300,000 gas
                 'gasPrice': gas_price,
                 'chainId': 11155111  # Sepolia chain ID
             })
 
-            # Sign and send the transaction
+            # Estimate transaction cost
+            tx_cost = gas_limit * gas_price
+            logger.info(f"Estimated transaction cost: {w3.from_wei(tx_cost, 'ether')} ETH")
+            if balance < tx_cost:
+                raise ValueError(f"Insufficient funds: Account balance is {w3.from_wei(balance, 'ether')} ETH, but transaction requires {w3.from_wei(tx_cost, 'ether')} ETH")
+
             signed_tx = w3.eth.account.sign_transaction(tx, private_key)
-            tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)  # Updated to raw_transaction
-            receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
+            tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+            receipt = w3.eth.wait_for_transaction_receipt(tx_hash, timeout=300)
 
             if receipt.status == 1:
-                logger.info(f"Encryption key stored on-chain: {tx_hash.hex()}")
+                logger.info(f"Key stored on-chain for CID {cid}: {tx_hash.hex()}")
                 return tx_hash.hex()
             else:
-                raise Exception("Transaction failed")
+                logger.error(f"Transaction failed. Receipt: {receipt}")
+                raise Exception(f"Transaction failed: {receipt.get('status', 'Unknown error')}, Revert reason: {receipt.get('revertReason', 'Not provided')}")
 
         except Exception as e:
             if "replacement transaction underpriced" in str(e) and attempt < retries - 1:
                 logger.warning(f"Attempt {attempt + 1} failed with underpriced error. Retrying in {delay} seconds...")
                 time.sleep(delay)
                 continue
+            logger.error(f"Failed to store key on chain after {retries} attempts: {str(e)}")
             raise Exception(f"Failed to store key on chain after {retries} attempts: {str(e)}")
-
+        
 # from web3 import Web3
 # from dotenv import load_dotenv
 # import os

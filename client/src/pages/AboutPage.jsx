@@ -5,7 +5,7 @@ const AboutPage = () => {
   return (
     <div className="about-page">
       <div className="page-header">
-        <h1 className="page-title">ABOUT DATASHIELD</h1>
+        <h1 className="page-title">ABOUT DIGITALSHIELD</h1>
         <p className="page-subtitle">Advanced Image Protection System</p>
       </div>
 
@@ -14,7 +14,7 @@ const AboutPage = () => {
           <div className="overview-content">
             <div className="overview-text">
               <p>
-                DataShield is a cutting-edge image protection system designed to give users complete control over their
+                DIGITALSHIELD is a cutting-edge image protection system designed to give users complete control over their
                 digital content in an era of AI-driven data harvesting.
               </p>
               <p>
@@ -60,7 +60,7 @@ const AboutPage = () => {
                 <div className="tech-details">
                   <h3>BLOCKCHAIN</h3>
                   <p>
-                    DataShield leverages advanced blockchain technology to create immutable records of image ownership
+                    DIGITALSHIELD leverages advanced blockchain technology to create immutable records of image ownership
                     and track access permissions.
                   </p>
                 </div>
@@ -93,7 +93,7 @@ const AboutPage = () => {
                 <div className="tech-details">
                   <h3>ENCRYPTION</h3>
                   <p>
-                    DataShield employs next-generation encryption algorithms designed to withstand attacks from quantum
+                    DIGITALSHIELD employs next-generation encryption algorithms designed to withstand attacks from quantum
                     computers.
                   </p>
                 </div>
@@ -108,7 +108,7 @@ const AboutPage = () => {
               </div>
 
               <p>
-                DataShield was created with the belief that individuals should have complete control over their digital
+                DIGITALSHIELD was created with the belief that individuals should have complete control over their digital
                 content. As AI systems increasingly harvest online data without consent, we provide the tools to protect
                 your creative works.
               </p>
@@ -179,7 +179,7 @@ const AboutPage = () => {
 
             <div className="system-footer">
               <div className="footer-logo"></div>
-              <div className="footer-text">DATASHIELD © 2025 | ADVANCED IMAGE PROTECTION SYSTEM</div>
+              <div className="footer-text">DIGITALSHIELD © 2025 | ADVANCED IMAGE PROTECTION SYSTEM</div>
             </div>
           </div>
         </HolographicCard>

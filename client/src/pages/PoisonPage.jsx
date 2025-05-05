@@ -382,7 +382,7 @@ const PoisonPage = () => {
             <div className="info-section">
               <h3>ADVANCED PROTECTION</h3>
               <p>
-                DataShield's poisoning technology embeds imperceptible noise
+                DIGITALSHIELD's poisoning technology embeds imperceptible noise
                 patterns into your images that specifically target and disrupt
                 AI training algorithms.
               </p>

@@ -5,7 +5,7 @@ import "./Header.css"
 const Header = ({ toggleSidebar }) => {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [animatedText, setAnimatedText] = useState("")
-  const fullText = "DATASHIELD"
+  const fullText = "DIGITALSHIELD"
 
   useEffect(() => {
     const timer = setInterval(() => {

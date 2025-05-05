@@ -130,7 +130,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="header-content">
-          <h1 className="page-title">DATASHIELD COMMAND CENTER</h1>
+          <h1 className="page-title">DIGITALSHIELD COMMAND CENTER</h1>
           <p className="page-subtitle">
             Advanced Image Protection System <span className="version">v2.8.5</span>
           </p>
